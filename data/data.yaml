@@ -1,0 +1,19 @@
+# Portable YOLO Dataset Configuration
+# Enclosure Detection Project - Roboflow Version 1
+# Workspace: mithu-1vntk | Project: object-detection-n6b60
+
+path: .
+train: data/train/images
+val: data/valid/images
+test: data/test/images
+
+# Classes
+names:
+  0: enclosure
+nc: 1
+
+roboflow:
+  workspace: mithu-1vntk
+  project: object-detection-n6b60
+  version: 1
+  license: CC BY 4.0

@@ -1,0 +1,41 @@
+{
+  "project_name": "enclosure detector",
+  "roboflow_project_id": "object-detection-n6b60",
+  "roboflow_workspace": "mithu-1vntk",
+  "version": 1,
+  "model_type": "yolo26n (YOLO26 Nano)",
+  "framework": "Ultralytics PyTorch / ONNX Opset 17",
+  "classes": {
+    "0": "enclosure"
+  },
+  "num_classes": 1,
+  "input_resolution": [
+    640,
+    640
+  ],
+  "parameters": 2504190,
+  "gflops": 5.9,
+  "layers": 260,
+  "training_metrics": {
+    "mAP_50": 1.0,
+    "mAP_50_95": 0.9637,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "f1_confidence_threshold": 0.22,
+    "finished_epochs": 218
+  },
+  "dataset_splits": {
+    "train": 28,
+    "valid": 8,
+    "test": 4,
+    "total_images": 40,
+    "total_targets": 60
+  },
+  "download_timestamp": "2026-11-10T15:26:00Z",
+  "files": {
+    "pytorch_weights": "models/best.pt",
+    "onnx_model": "models/best.onnx",
+    "dataset_config": "data/data.yaml"
+  }
+}
