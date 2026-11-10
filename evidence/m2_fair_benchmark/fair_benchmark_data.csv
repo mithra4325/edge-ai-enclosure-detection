@@ -1,4 +1,0 @@
-Model Format,Model Size (MB),Median Latency (ms),P95 Latency (ms),FPS
-PyTorch FP32,5.16,468.20,695.20,2.14
-ONNX FP32,9.34,256.80,393.40,3.89
-ONNX INT8,2.72,274.60,445.80,3.64
