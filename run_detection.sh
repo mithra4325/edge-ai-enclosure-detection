@@ -9,9 +9,10 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Ensure DISPLAY is set for GUI window on local desktop
+# Ensure DISPLAY and Qt backend are set for GUI window on local desktop
 export DISPLAY="${DISPLAY:-:0}"
 export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
+export QT_QPA_PLATFORM="xcb"
 
 # Virtual environment path
 VENV_PATH="$SCRIPT_DIR/venv"

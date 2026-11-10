@@ -101,16 +101,16 @@ class EnclosureDetector:
             )
 
         # 2. Semi-transparent HUD Header Banner at top
-        banner_h = 105
+        banner_h = 130
         overlay = annotated.copy()
         cv2.rectangle(overlay, (0, 0), (w, banner_h), (20, 20, 20), -1)
         cv2.addWeighted(overlay, 0.75, annotated, 0.25, 0, annotated)
 
         # 3. HUD Text Overlay
-        # Line 1: Title & Target
+        # Line 1: Title
         cv2.putText(
             annotated,
-            "ENCLOSURE DETECTION",
+            "CUSTOM ENCLOSURE DETECTION",
             (15, 24),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.65,
@@ -124,39 +124,51 @@ class EnclosureDetector:
         cv2.putText(
             annotated,
             f"Objects detected: {obj_count}",
-            (15, 52),
+            (15, 48),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
+            0.55,
             status_color,
             2,
             cv2.LINE_AA
         )
 
-        # Line 2: Performance Telemetry
-        telemetry_str = f"FPS: {fps:.1f}   |   Inference latency: {latency_ms:.1f} ms"
+        # Line 2: FPS
         cv2.putText(
             annotated,
-            telemetry_str,
-            (15, 76),
+            f"FPS: {fps:.2f}",
+            (15, 70),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.55,
+            0.52,
             (255, 255, 255),
             1,
             cv2.LINE_AA
         )
 
-        # Line 3: System Status (CPU / Temp / RAM)
+        # Line 3: Latency
+        cv2.putText(
+            annotated,
+            f"Inference latency: {latency_ms:.1f} ms",
+            (15, 92),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.52,
+            (255, 255, 255),
+            1,
+            cv2.LINE_AA
+        )
+
+        # Line 4: Device & System Specs
         sys_str = (
-            f"CPU: {system_stats.get('cpu_percent', 0.0)}%   |   "
-            f"Temp: {system_stats.get('cpu_temp_c', 0.0)}C   |   "
-            f"RAM: {system_stats.get('ram_used_mb', 0.0)}MB (CPU Inference)"
+            f"Device: Raspberry Pi 5 CPU (ARM Cortex-A76) | "
+            f"CPU: {system_stats.get('cpu_percent', 0.0)}% | "
+            f"Temp: {system_stats.get('cpu_temp_c', 0.0)}C | "
+            f"RAM: {system_stats.get('ram_used_mb', 0.0)}MB"
         )
         cv2.putText(
             annotated,
             sys_str,
-            (15, 96),
+            (15, 114),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.45,
+            0.42,
             (200, 200, 200),
             1,
             cv2.LINE_AA
