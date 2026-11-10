@@ -26,12 +26,12 @@ This dataset consists of **40 high-resolution physical photographs** capturing a
 
 The dataset follows an exact **70% / 20% / 10%** split ratio:
 
-| Split Partition | Images | Percentage | Bounding Box Annotations | Storage Directory in Repository |
-| :--- | :---: | :---: | :---: | :--- |
-| **Training Split** | **28** | **70.0%** | 44 | [`data/train/`](../data/train/) |
-| **Validation Split** | **8** | **20.0%** | 11 | [`data/valid/`](../data/valid/) |
-| **Testing Split (Held-Out)** | **4** | **10.0%** | 5 | [`data/test/`](../data/test/) |
-| **Total** | **40** | **100.0%** | **60** | [`data/`](../data/) |
+| Split Partition | Images | Percentage | Bounding Box Annotations | Storage Directory in Repository | Visually Annotated Images |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| **Training Split** | **28** | **70.0%** | 44 | [`data/train/`](../data/train/) | [`dataset_v1/annotated_images/train/`](annotated_images/train/) |
+| **Validation Split** | **8** | **20.0%** | 11 | [`data/valid/`](../data/valid/) | [`dataset_v1/annotated_images/valid/`](annotated_images/valid/) |
+| **Testing Split (Held-Out)** | **4** | **10.0%** | 5 | [`data/test/`](../data/test/) | [`dataset_v1/annotated_images/test/`](annotated_images/test/) |
+| **Total** | **40** | **100.0%** | **60** | [`data/`](../data/) | [`dataset_v1/annotated_images/`](annotated_images/) |
 
 ---
 

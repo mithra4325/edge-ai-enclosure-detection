@@ -35,61 +35,74 @@ This repository contains the trained model weights, portable ONNX export, datase
 ```
 edge-ai-enclosure-detection/
 │
+├── camera_and_repo/                          # M1.1 Camera & Repo Destination
+│   ├── README.md
+│   ├── spec_sheet.md                         # Raspberry Pi 5 & Logitech C270 hardware specs
+│   ├── first_frame.jpg                       # Frame captured directly on the device
+│   ├── commit_evidence.md                    # Git commit log & authorship proof
+│   └── capture_frame.py                      # Device capture reproduction script
+│
+├── opencv_pipeline/                          # M1.2 Live OpenCV Pipeline Destination
+│   ├── README.md
+│   ├── camera.py                             # Threaded V4L2 acquisition
+│   ├── detector.py                           # Bounding box & HUD telemetry engine
+│   ├── live_detection.py                     # Main interactive application
+│   ├── requirements.txt                      # Pipeline dependencies
+│   └── live_detection_overlay.jpg            # Frame with boxes & count overlay
+│
+├── baseline_speed/                           # M1.3 Baseline Speed Benchmark Destination
+│   ├── README.md
+│   ├── benchmark.py                          # 100-iteration CPU benchmark runner
+│   ├── baseline_results.csv                  # Real measured telemetry log
+│   └── benchmark_overlay.jpg                 # Benchmark HUD screenshot
+│
+├── dataset_v1/                               # M1.4 Dataset v1 & Data Card Destination
+│   ├── README.md
+│   ├── dataset_card.md                       # Formal dataset card & class specs
+│   ├── annotate_dataset.py                   # Bounding box rendering script
+│   ├── annotated_images/                     # All 40 visually annotated images:
+│   │   ├── train/                            # 28 images with ground-truth boxes
+│   │   ├── valid/                            # 8 images with ground-truth boxes
+│   │   └── test/                             # 4 images with ground-truth boxes
+│   └── [sample annotated preview images]
+│
+├── correct_split/                            # M1.5 Correct Split Destination (70/20/10)
+│   ├── README.md                             # Mathematical audit & leakage analysis
+│   ├── verify_split.py                       # Automated SHA-256 collision checker
+│   └── verification_results.txt              # Zero-leakage verification log
+│
+├── current_split/                            # M1.5 Alternate URL Destination (identical)
+│   ├── README.md
+│   ├── verify_split.py
+│   └── verification_results.txt
+│
+├── train_and_run_detector/                   # M1.6 Train & Run Detector Destination
+│   ├── README.md                             # 100% mAP@0.5, confusion matrix, 10 failure analyses
+│   ├── evaluate_detector.py                  # Standalone test set evaluator
+│   └── [test prediction samples]
+│
 ├── cad/
 │   └── pir_sensor_enclosure_mithra_ravi.stl  # 3D-printed enclosure CAD model
 ├── data/
 │   ├── data.yaml                             # Portable YOLO dataset manifest
 │   ├── dataset_info.md                       # Full dataset split documentation
-│   ├── samples/                              # Held-out sample images for verification
-│   ├── train/                                # Training images and labels (70%)
-│   ├── valid/                                # Validation images and labels (20%)
-│   └── test/                                 # Test split images and labels (10%)
+│   ├── samples/                              # Verification sample images
+│   ├── train/                                # Training images & labels (28)
+│   ├── valid/                                # Validation images & labels (8)
+│   └── test/                                 # Test split images & labels (4)
 ├── models/
 │   ├── best.pt                               # Original trained YOLO Nano PyTorch weights
 │   ├── best.onnx                             # Standalone ONNX runtime export
-│   └── model_metadata.json                   # Comprehensive training and evaluation metrics
+│   └── model_metadata.json                   # Comprehensive Roboflow training metrics
 ├── src/
-│   ├── camera.py                             # Threaded low-latency camera acquisition
+│   ├── camera.py                             # Low-latency camera stream
 │   ├── detector.py                           # YOLO detection & HUD overlay engine
-│   ├── inference.py                          # Portable multi-backend inference engine
+│   ├── inference.py                          # Multi-backend inference runner
 │   └── monitor.py                            # Telemetry monitor & benchmark logger
-│
-├── evidence/
+├── evidence/                                 # Complete assessment backup archives
 │   └── M1/
-│       ├── 01_camera_and_repo/               # M1.1 Spec sheet, first frame & commit proof
-│       │   ├── README.md
-│       │   ├── spec_sheet.md
-│       │   ├── first_frame.jpg
-│       │   └── commit_evidence.md
-│       └── 05_correct_split/                 # M1.5 Split verification & zero-leakage proof
-│           ├── README.md
-│           ├── verify_split.py
-│           └── verification_results.txt
-│
-├── opencv_pipeline/                          # M1.2 Live OpenCV Pipeline Destination
-│   ├── README.md
-│   ├── camera.py
-│   ├── detector.py
-│   ├── live_detection.py
-│   ├── requirements.txt
-│   └── [live detection overlay frames]
-│
-├── baseline_speed/                           # M1.3 Baseline Speed Benchmark Destination
-│   ├── README.md
-│   ├── benchmark.py
-│   ├── baseline_results.csv
-│   └── [performance screenshots]
-│
-├── dataset_v1/                               # M1.4 Dataset v1 & Data Card Destination
-│   ├── README.md
-│   ├── dataset_card.md
-│   └── [ground-truth annotated samples]
-│
-├── train_and_run_detector/                   # M1.6 Train & Run Detector Destination
-│   ├── README.md
-│   ├── evaluate_detector.py
-│   └── [test prediction samples]
-│
+│       ├── 01_camera_and_repo/
+│       └── 05_correct_split/
 ├── requirements.txt                          # Cross-platform dependencies
 ├── run_detection.sh                          # Single-command Raspberry Pi 5 launcher
 └── README.md                                 # Master project documentation
@@ -99,15 +112,15 @@ edge-ai-enclosure-detection/
 
 ## 3. College Assessment Rubric Evidence Index (M1)
 
-This repository is organized to satisfy every individual assessment requirement for **Milestone 1 (M1 Detect)**. Each destination folder contains complete documentation, reproducible code, and physical verification evidence:
+This repository is organized to satisfy every individual assessment requirement for **Milestone 1 (M1 Detect)** (20 / 20 marks). Each destination folder contains complete documentation, reproducible code, and physical verification evidence:
 
 | Milestone Task | Submitted Document URL | Repository Destination Folder | Task README & Proof | Status | Max Marks |
 | :--- | :--- | :--- | :--- | :---: | :---: |
-| **M1.1: Camera and repo** | `https://github.com/mithra4325/edge-ai-enclosure-detection` | [`evidence/M1/01_camera_and_repo/`](evidence/M1/01_camera_and_repo/) | [`README.md`](evidence/M1/01_camera_and_repo/README.md) & [`spec_sheet.md`](evidence/M1/01_camera_and_repo/spec_sheet.md) | **COMPLETE** | 2 |
+| **M1.1: Camera and repo** | `https://github.com/mithra4325/edge-ai-enclosure-detection` | [`camera_and_repo/`](camera_and_repo/) & [`evidence/M1/01_camera_and_repo/`](evidence/M1/01_camera_and_repo/) | [`README.md`](camera_and_repo/README.md), [`spec_sheet.md`](camera_and_repo/spec_sheet.md), [`first_frame.jpg`](camera_and_repo/first_frame.jpg) | **COMPLETE** | 2 |
 | **M1.2: OpenCV pipeline** | `https://github.com/mithra4325/edge-ai-enclosure-detection/opencv_pipeline` | [`opencv_pipeline/`](opencv_pipeline/) | [`README.md`](opencv_pipeline/README.md) & [`live_detection.py`](opencv_pipeline/live_detection.py) | **COMPLETE** | 4 |
 | **M1.3: Baseline speed** | `https://github.com/mithra4325/edge-ai-enclosure-detection/baseline_speed` | [`baseline_speed/`](baseline_speed/) | [`README.md`](baseline_speed/README.md) & [`baseline_results.csv`](baseline_speed/baseline_results.csv) | **COMPLETE** | 3 |
-| **M1.4: Dataset v1** | `https://github.com/mithra4325/edge-ai-enclosure-detection/dataset_v1` | [`dataset_v1/`](dataset_v1/) | [`README.md`](dataset_v1/README.md) & [`dataset_card.md`](dataset_v1/dataset_card.md) | **COMPLETE** | 4 |
-| **M1.5: Correct split** | `https://github.com/theiceman07/edge-computing/tree/.../05_correct_split` *(Reference)* | [`evidence/M1/05_correct_split/`](evidence/M1/05_correct_split/) | [`README.md`](evidence/M1/05_correct_split/README.md) & [`verify_split.py`](evidence/M1/05_correct_split/verify_split.py) | **COMPLETE** | 2 |
+| **M1.4: Dataset v1** | `https://github.com/mithra4325/edge-ai-enclosure-detection/dataset_v1` | [`dataset_v1/`](dataset_v1/) | [`README.md`](dataset_v1/README.md), [`dataset_card.md`](dataset_v1/dataset_card.md), [`annotated_images/`](dataset_v1/annotated_images/) (40 images) | **COMPLETE** | 4 |
+| **M1.5: Correct split** | `https://github.com/mithra4325/edge-ai-enclosure-detection/correct_split` | [`correct_split/`](correct_split/) & [`current_split/`](current_split/) | [`README.md`](correct_split/README.md), [`verify_split.py`](correct_split/verify_split.py), [`verification_results.txt`](correct_split/verification_results.txt) | **COMPLETE** | 2 |
 | **M1.6: Train and run detector** | `https://github.com/mithra4325/edge-ai-enclosure-detection/train_and_run_detector` | [`train_and_run_detector/`](train_and_run_detector/) | [`README.md`](train_and_run_detector/README.md) & [`evaluate_detector.py`](train_and_run_detector/evaluate_detector.py) | **COMPLETE** | 5 |
 | **TOTAL M1 MARKS** | | | | **20 / 20** | **20** |
 
@@ -148,7 +161,12 @@ python3 baseline_speed/benchmark.py
 
 ### Run Split Verification Script:
 ```bash
-python3 evidence/M1/05_correct_split/verify_split.py
+python3 correct_split/verify_split.py
+```
+
+### Run Full Dataset Annotation Rendering:
+```bash
+python3 dataset_v1/annotate_dataset.py
 ```
 
 ### Run Test Model Evaluation:

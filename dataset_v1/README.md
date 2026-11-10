@@ -32,7 +32,7 @@ The objective of Milestone 1.4 is to document the authentic, physical computer v
 5. **Auto-Orientation:** EXIF orientation flags were stripped during export to ensure consistent top-left coordinate alignment across edge inference backends.
 
 ## 6. How to Reproduce or Run It
-To inspect the dataset labels and render ground-truth bounding boxes on the Raspberry Pi 5:
+To inspect the dataset labels and render ground-truth bounding boxes on all 40 images on the Raspberry Pi 5:
 ```bash
 # 1. Activate virtual environment
 source venv/bin/activate
@@ -40,21 +40,22 @@ source venv/bin/activate
 # 2. Inspect data manifest
 cat data/data.yaml
 
-# 3. Verify ground-truth bounding box labels
-python -c "
-import cv2
-from pathlib import Path
-imgs = sorted(list(Path('data/train/images').glob('*.jpg')))
-print(f'Total training images found: {len(imgs)}')
-"
+# 3. Generate visually annotated images for all 40 images across train, valid, and test
+python dataset_v1/annotate_dataset.py
 ```
 
 ## 7. Evidence Available in this Folder
 - [`dataset_card.md`](dataset_card.md): Comprehensive Dataset Card covering specifications, class definitions, and attribution.
-- [`annotated_sample_1.jpg`](annotated_sample_1.jpg): Ground-truth tight bounding box on workbench background.
-- [`annotated_sample_2.jpg`](annotated_sample_2.jpg): Ground-truth tight bounding box on close-up perspective.
-- [`annotated_sample_3.jpg`](annotated_sample_3.jpg): Ground-truth tight bounding box on oblique angled enclosure.
-- [`annotated_sample_4.jpg`](annotated_sample_4.jpg): Ground-truth tight bounding box on multi-enclosure scene.
+- [`annotate_dataset.py`](annotate_dataset.py): Automated script generating visually annotated ground-truth images with Roboflow magenta bounding boxes and badges.
+- [`annotated_images/`](annotated_images/): Complete directory of **all 40 visually annotated images** across all splits:
+  - [`annotated_images/train/`](annotated_images/train/): All 28 training images with tight ground-truth bounding boxes (44 instances).
+  - [`annotated_images/valid/`](annotated_images/valid/): All 8 validation images with tight ground-truth bounding boxes (11 instances).
+  - [`annotated_images/test/`](annotated_images/test/): All 4 held-out test images with tight ground-truth bounding boxes (5 instances).
+- High-resolution sample previews:
+  - [`annotated_sample_1.jpg`](annotated_sample_1.jpg): Ground-truth tight bounding box on workbench background.
+  - [`annotated_sample_2.jpg`](annotated_sample_2.jpg): Ground-truth tight bounding box on close-up perspective.
+  - [`annotated_sample_3.jpg`](annotated_sample_3.jpg): Ground-truth tight bounding box on oblique angled enclosure.
+  - [`annotated_sample_4.jpg`](annotated_sample_4.jpg): Ground-truth tight bounding box on multi-enclosure scene.
 
 ## 8. Actual Results
 

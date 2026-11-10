@@ -1,0 +1,17 @@
+=================================================================
+ DATASET SPLIT & LEAKAGE VERIFICATION REPORT 
+=================================================================
+Total Images in Dataset: 40
+  - Training Set:   28 images ( 70.0%) [Target: 70%]
+  - Validation Set:  8 images ( 20.0%) [Target: 20%]
+  - Test Set:        4 images ( 10.0%) [Target: 10%]
+=================================================================
+VERIFICATION CHECKS:
+  1. Filename Overlap (Train vs Valid): 0 images
+  2. Filename Overlap (Train vs Test):  0 images
+  3. Filename Overlap (Valid vs Test):  0 images
+  4. Hash Collisions  (Train vs Valid): 0 collisions
+  5. Hash Collisions  (Train vs Test):  0 collisions
+  6. Hash Collisions  (Valid vs Test):  0 collisions
+=================================================================
+[SUCCESS] Dataset strictly conforms to 70/20/10 ratio with ZERO data leakage.
