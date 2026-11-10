@@ -114,28 +114,68 @@ python src/inference.py --model models/best.pt --source 0 --show
 
 ---
 
-## 5. Raspberry Pi Deployment Preparation
+## 5. Raspberry Pi 5 Deployment & Assessment Evidence (M1)
 
-When transferring to a Raspberry Pi:
-1. **Clone this repository** on the Raspberry Pi:
-   ```bash
-   git clone https://github.com/mithra4325/edge-ai-enclosure-detection.git
-   cd edge-ai-enclosure-detection
-   ```
-2. **Install requirements** in a virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
-3. **Connect Camera:** Ensure Raspberry Pi Camera module or USB camera is connected.
-4. **Execute Inference:**
-   ```bash
-   python src/inference.py --model models/best.onnx --source 0
-   ```
-> [!NOTE]
-> Physical hardware benchmarking on the Raspberry Pi board will be conducted when returning to the college laboratory.
+The trained model has been deployed and evaluated on physical **Raspberry Pi 5** hardware connected to a USB webcam.
+
+### Hardware & Software Specifications
+- **Device:** Raspberry Pi 5 Model B Rev 1.1 (4GB RAM)
+- **Processor:** Broadcom BCM2712 Quad-core ARM Cortex-A76 @ 2.4 GHz (aarch64)
+- **Operating System:** Debian GNU/Linux 13 (trixie) / Raspberry Pi OS 13.7 (Kernel 6.18.50+rpt-rpi-2712)
+- **Python Version:** Python 3.13.5
+- **Camera:** Logitech C270 HD USB Webcam (`/dev/video0`, UVC driver)
+- **Inference Engine:** PyTorch CPU (`torch 2.15.0+cpu` & `ultralytics 8.4.208`) + OpenCV 4.10.0 + ONNX Runtime 1.31.1
+
+---
+
+### M1 Milestone Evidence Summary
+
+#### M1.1 Camera & Repository Setup
+- **USB Webcam Detection:** Successfully recognized Logitech C270 on `/dev/video0` with native 640x480 resolution at 30 FPS.
+- **First Captured Frame:** Verified and saved at [`evidence/camera/test_frame.jpg`](evidence/camera/test_frame.jpg).
+- **Repository Integrity:** Preserved original model weights (`models/best.pt`, `models/best.onnx`) without retraining.
+
+#### M1.2 OpenCV Real-Time Pipeline
+- **Modular Architecture:**
+  - `src/camera.py`: Low-latency threaded capture pipeline eliminating frame queue buffer lag.
+  - `src/detector.py`: Model loader, bounding box annotation, and high-contrast telemetry HUD.
+  - `src/monitor.py`: Hardware statistics monitor (CPU %, RAM, Temperature) and CSV logger.
+  - `src/inference.py`: Top-level CLI engine supporting both static evaluation and live camera streaming.
+- **Live Detection Evidence:** Real-time detections with bounding boxes, confidence scores, and object counts saved at [`evidence/live_detection/`](evidence/live_detection/).
+- **Offline Model Validation:** Sample image inferences with predicted bounding boxes saved at [`evidence/model_test/prediction.jpg`](evidence/model_test/prediction.jpg).
+
+#### M1.3 Measured Baseline Speed & Telemetry
+Actual hardware benchmarks recorded on the Raspberry Pi 5 CPU during live webcam detection:
+
+| Metric | Measured Baseline Value | Assessment Status |
+| :--- | :--- | :--- |
+| **Inference Latency** | **270 ms – 290 ms** per frame | Measured via `time.perf_counter` |
+| **Throughput (FPS)** | **3.3 – 3.5 FPS** (CPU inference) | Smooth real-time update |
+| **CPU Usage** | **57% – 63%** across 4 cores | Stable execution |
+| **RAM Usage** | **~2,450 MB** system total | < 65% of 4GB memory capacity |
+| **CPU Operating Temp** | **49.0°C – 51.5°C** | Well below thermal throttling (80°C) |
+| **Benchmark Log** | Saved with timestamps | [`evidence/benchmark/baseline_results.csv`](evidence/benchmark/baseline_results.csv) |
+
+---
+
+### Quick Launch on Raspberry Pi 5
+
+To run the live detection application with a single command:
+```bash
+./run_detection.sh
+```
+*To exit live detection, press the **`q`** key in the OpenCV video window.*
+
+To run in headless or benchmark mode:
+```bash
+./venv/bin/python src/inference.py --model models/best.pt --source 0 --max-frames 50
+```
+
+---
+
+### Known Limitations & Future Optimizations
+1. **CPU Execution:** Inference currently executes on the ARM Cortex-A76 CPU. Latency is ~280ms (3.5 FPS).
+2. **Future Acceleration (M2 / M3):** Throughput can be accelerated further using ONNX Runtime with INT8 quantization, OpenVINO, or NPU acceleration if a Hailo-8L Raspberry Pi AI HAT is attached.
 
 ---
 
