@@ -81,6 +81,27 @@ edge-ai-enclosure-detection/
 │   ├── evaluate_detector.py                  # Standalone test set evaluator
 │   └── [test prediction samples]
 │
+├── docs/                                     # Comprehensive Technical Documentation
+│   ├── PROJECT_REPORT.md                     # Full M1 technical report
+│   ├── MODEL_CARD.md                         # Detailed Model Card (YOLO26n)
+│   ├── DATASET_CARD.md                       # Comprehensive Dataset Card (v1)
+│   ├── EXPERIMENT_LOG.md                     # Chronological development record
+│   ├── FAILURE_ANALYSIS.md                   # White-surface false positive analysis & M2 plan
+│   ├── REPRODUCIBILITY.md                    # Step-by-step reproduction guide
+│   └── M1_ASSESSMENT_MAPPING.md              # Rubric verification & marks mapping (20/20)
+│
+├── evidence/                                 # Complete Assessment Archives
+│   └── M1/
+│       ├── 01_camera_and_repo/               # M1.1 Spec sheet, first frame, commit proof
+│       ├── 02_opencv_pipeline/               # M1.2 Pipeline source, overlay proof
+│       ├── 03_baseline_speed/                # M1.3 Benchmark runner, CSV log
+│       ├── 04_dataset_v1/                    # M1.4 Data card, samples
+│       ├── 05_correct_split/                 # M1.5 Split verification, SHA-256 proof
+│       ├── 06_live_demonstration/            # M1.6 Live video (IMG_9698) & screenshots (9700/9701)
+│       ├── 07_model_training_and_evaluation/ # M1.6 Evaluation script, predictions
+│       ├── 08_model_failure_analysis/        # Detailed failure analysis & M2 plan
+│       └── 09_raspberry_pi_setup/            # Hardware specs, reproducible setup script
+│
 ├── cad/
 │   └── pir_sensor_enclosure_mithra_ravi.stl  # 3D-printed enclosure CAD model
 ├── data/
@@ -95,14 +116,10 @@ edge-ai-enclosure-detection/
 │   ├── best.onnx                             # Standalone ONNX runtime export
 │   └── model_metadata.json                   # Comprehensive Roboflow training metrics
 ├── src/
-│   ├── camera.py                             # Low-latency camera stream
+│   ├── camera.py                             # Low-latency threaded camera stream
 │   ├── detector.py                           # YOLO detection & HUD overlay engine
 │   ├── inference.py                          # Multi-backend inference runner
 │   └── monitor.py                            # Telemetry monitor & benchmark logger
-├── evidence/                                 # Complete assessment backup archives
-│   └── M1/
-│       ├── 01_camera_and_repo/
-│       └── 05_correct_split/
 ├── requirements.txt                          # Cross-platform dependencies
 ├── run_detection.sh                          # Single-command Raspberry Pi 5 launcher
 └── README.md                                 # Master project documentation
@@ -126,7 +143,45 @@ This repository is organized to satisfy every individual assessment requirement 
 
 ---
 
-## 4. Raspberry Pi 5 Physical Hardware & Performance Summary
+## 4. Live Demonstration Evidence
+
+Authentic live demonstration recordings captured directly on the Raspberry Pi 5 are preserved in [`evidence/M1/06_live_demonstration/`](evidence/M1/06_live_demonstration/):
+
+- **Live Demonstration Video:** [`evidence/M1/06_live_demonstration/live_demo_video.mov`](evidence/M1/06_live_demonstration/live_demo_video.mov) (Original upload: `IMG_9698.MOV`, 24.5 MB, $2160 \times 3840$ @ 120 FPS high-speed capture demonstrating real-time camera inference and OpenCV window tracking).
+- **Live Demonstration Screenshot 1:** [`evidence/M1/06_live_demonstration/live_demo_screenshot_1.png`](evidence/M1/06_live_demonstration/live_demo_screenshot_1.png) (Original upload: `IMG_9700.PNG`, 1206&times;2622, showing live enclosure detection at **76.1%** confidence along with spurious edge activations on light surfaces).
+- **Live Demonstration Screenshot 2:** [`evidence/M1/06_live_demonstration/live_demo_screenshot_2.png`](evidence/M1/06_live_demonstration/live_demo_screenshot_2.png) (Original upload: `IMG_9701.PNG`, 1206&times;2622, showing enclosure detection at **74.5%** and **66.7%** confidence under oblique perspective).
+- **Demonstration Analysis:** [`evidence/M1/06_live_demonstration/README.md`](evidence/M1/06_live_demonstration/README.md) contains full telemetry and visual analysis.
+
+---
+
+## 5. Technical Documentation Index
+
+Complete project engineering documentation is archived in [`docs/`](docs/):
+
+1. **[`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md):** Complete M1 technical report covering problem definition, CAD modeling, Roboflow workflow, training results, embedded deployment, and benchmarking.
+2. **[`docs/MODEL_CARD.md`](docs/MODEL_CARD.md):** Formal Model Card specifying YOLO26n architecture, 2.5M parameters, 5.9 GFLOPs, inputs, weights, and PyTorch vs ONNX differences.
+3. **[`docs/DATASET_CARD.md`](docs/DATASET_CARD.md):** Formal Dataset Card documenting the 40-image authentic Roboflow dataset v1, 60 annotations, and cryptographic 70/20/10 split.
+4. **[`docs/EXPERIMENT_LOG.md`](docs/EXPERIMENT_LOG.md):** Chronological development record detailing every Git commit, test run, and hardware integration.
+5. **[`docs/FAILURE_ANALYSIS.md`](docs/FAILURE_ANALYSIS.md):** In-depth engineering failure analysis of the white-surface false-positive issue and M2 data-centric solution.
+6. **[`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md):** Step-by-step reproducible setup guide for fresh Raspberry Pi 5 installations.
+7. **[`docs/M1_ASSESSMENT_MAPPING.md`](docs/M1_ASSESSMENT_MAPPING.md):** Complete assessment rubric verification matrix (20 / 20 marks verified).
+
+---
+
+## 6. Observed Limitation: The White-Surface False-Positive Problem & M2 Plan
+
+During real-world webcam deployment, an important operational limitation was discovered:
+- **Observation:** The model occasionally detects non-enclosure white surfaces (white paper, pale desk margins, light walls) as enclosures with confidence scores between $22\%$ and $48\%$.
+- **Hypothesis:** Dataset v1 contained 40 images of the white PLA enclosure photographed exclusively against a dark brown wooden workbench. The network learned a spurious shortcut: correlating high-contrast white boundaries with object presence, rather than purely invariant 3D geometric features.
+- **Proposed M2 Mitigations:**
+  1. Expand dataset to include white desks, metallic surfaces, and varied rooms.
+  2. Inject 20+ hard-negative images (white paper, empty desks, non-enclosure plastic) labeled with zero boxes.
+  3. Train a separate v2 model checkpoint and comparatively evaluate on a common untouched test benchmark.
+  4. Quantize to INT8 via TFLite / ONNX Runtime to elevate frame rate from $\approx 2\text{ FPS}$ to $>15\text{ FPS}$.
+
+---
+
+## 7. Raspberry Pi 5 Physical Hardware & Performance Summary
 
 - **Device:** Raspberry Pi 5 Model B Rev 1.1 (4GB LPDDR4X RAM, Broadcom BCM2712 Quad-core ARM Cortex-A76 @ 2.4 GHz)
 - **Camera:** Logitech C270 HD USB Webcam (`/dev/video0`, native 640&times;480 @ 30 FPS)
@@ -145,7 +200,7 @@ This repository is organized to satisfy every individual assessment requirement 
 
 ---
 
-## 5. Quick Launch Instructions
+## 8. Quick Launch Instructions
 
 ### Run Live Webcam Object Detection:
 ```bash
@@ -176,7 +231,7 @@ python3 train_and_run_detector/evaluate_detector.py
 
 ---
 
-## 6. License & Acknowledgements
+## 9. License & Acknowledgements
 
 - **Author:** Mithra Ravi ([@mithra4325](https://github.com/mithra4325))
 - **Dataset Hosting & Cloud Training:** [Roboflow Universe](https://universe.roboflow.com/mithu-1vntk/object-detection-n6b60) (CC BY 4.0)
