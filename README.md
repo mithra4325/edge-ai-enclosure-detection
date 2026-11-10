@@ -114,68 +114,69 @@ python src/inference.py --model models/best.pt --source 0 --show
 
 ---
 
-## 5. Raspberry Pi 5 Deployment & Assessment Evidence (M1)
+## 5. College Assessment Rubric Evidence Index (M1 & M2)
 
-The trained model has been deployed and evaluated on physical **Raspberry Pi 5** hardware connected to a USB webcam.
+This repository is structured to satisfy every individual assessment requirement for **Milestone 1 (M1 Detect)** and **Milestone 2 (M2 Optimize)**. Click any requirement below to navigate directly to its evidence folder and proof documentation:
 
-### Hardware & Software Specifications
-- **Device:** Raspberry Pi 5 Model B Rev 1.1 (4GB RAM)
-- **Processor:** Broadcom BCM2712 Quad-core ARM Cortex-A76 @ 2.4 GHz (aarch64)
-- **Operating System:** Debian GNU/Linux 13 (trixie) / Raspberry Pi OS 13.7 (Kernel 6.18.50+rpt-rpi-2712)
-- **Python Version:** Python 3.13.5
-- **Camera:** Logitech C270 HD USB Webcam (`/dev/video0`, UVC driver)
-- **Inference Engine:** PyTorch CPU (`torch 2.15.0+cpu` & `ultralytics 8.4.208`) + OpenCV 4.10.0 + ONNX Runtime 1.31.1
+### Milestone 1: M1 Detect (20 Marks Total)
 
----
-
-### M1 Milestone Evidence Summary
-
-#### M1.1 Camera & Repository Setup
-- **USB Webcam Detection:** Successfully recognized Logitech C270 on `/dev/video0` with native 640x480 resolution at 30 FPS.
-- **First Captured Frame:** Verified and saved at [`evidence/camera/test_frame.jpg`](evidence/camera/test_frame.jpg).
-- **Repository Integrity:** Preserved original model weights (`models/best.pt`, `models/best.onnx`) without retraining.
-
-#### M1.2 OpenCV Real-Time Pipeline
-- **Modular Architecture:**
-  - `src/camera.py`: Low-latency threaded capture pipeline eliminating frame queue buffer lag.
-  - `src/detector.py`: Model loader, bounding box annotation, and high-contrast telemetry HUD.
-  - `src/monitor.py`: Hardware statistics monitor (CPU %, RAM, Temperature) and CSV logger.
-  - `src/inference.py`: Top-level CLI engine supporting both static evaluation and live camera streaming.
-- **Live Detection Evidence:** Real-time detections with bounding boxes, confidence scores, and object counts saved at [`evidence/live_detection/`](evidence/live_detection/).
-- **Offline Model Validation:** Sample image inferences with predicted bounding boxes saved at [`evidence/model_test/prediction.jpg`](evidence/model_test/prediction.jpg).
-
-#### M1.3 Measured Baseline Speed & Telemetry
-Actual hardware benchmarks recorded on the Raspberry Pi 5 CPU during live webcam detection:
-
-| Metric | Measured Baseline Value | Assessment Status |
-| :--- | :--- | :--- |
-| **Inference Latency** | **270 ms – 290 ms** per frame | Measured via `time.perf_counter` |
-| **Throughput (FPS)** | **3.3 – 3.5 FPS** (CPU inference) | Smooth real-time update |
-| **CPU Usage** | **57% – 63%** across 4 cores | Stable execution |
-| **RAM Usage** | **~2,450 MB** system total | < 65% of 4GB memory capacity |
-| **CPU Operating Temp** | **49.0°C – 51.5°C** | Well below thermal throttling (80°C) |
-| **Benchmark Log** | Saved with timestamps | [`evidence/benchmark/baseline_results.csv`](evidence/benchmark/baseline_results.csv) |
+| Task | What Student Must Show (Individual Proof) | Marks | Evidence Folder & Documentation |
+| :--- | :--- | :---: | :--- |
+| **Camera and repo** | Capture a frame on device & commit with spec sheet + first frame | **2** | [`evidence/m1_camera_and_repo/`](evidence/m1_camera_and_repo/) &rarr; [`spec_sheet.md`](evidence/m1_camera_and_repo/spec_sheet.md) |
+| **OpenCV pipeline** | Run live overlay (boxes + count) on device | **4** | [`evidence/m1_opencv_pipeline/`](evidence/m1_opencv_pipeline/) &rarr; [`pipeline_architecture.md`](evidence/m1_opencv_pipeline/pipeline_architecture.md) |
+| **Baseline speed** | Measure FPS, latency, CPU/GPU load, temperature with own numbers | **3** | [`evidence/m1_baseline_speed/`](evidence/m1_baseline_speed/) &rarr; [`baseline_speed_report.md`](evidence/m1_baseline_speed/baseline_speed_report.md) |
+| **Dataset v1** | Label images with tight, correct boxes + data card | **4** | [`evidence/m1_dataset_v1/`](evidence/m1_dataset_v1/) &rarr; [`data_card.md`](evidence/m1_dataset_v1/data_card.md) |
+| **Correct split** | Explain and show 70/20/10 split with no data leakage | **2** | [`evidence/m1_correct_split/`](evidence/m1_correct_split/) &rarr; [`split_verification.md`](evidence/m1_correct_split/split_verification.md) |
+| **Train and run detector** | Show mAP@0.5, precision, recall, confusion matrix & explain 10 wrong detections | **5** | [`evidence/m1_train_and_run_detector/`](evidence/m1_train_and_run_detector/) &rarr; [`detector_training_evaluation.md`](evidence/m1_train_and_run_detector/detector_training_evaluation.md) |
 
 ---
 
-### Quick Launch on Raspberry Pi 5
+### Milestone 2: M2 Optimize (20 Marks Total)
 
-To run the live detection application with a single command:
+| Task | What Student Must Show (Individual Proof) | Marks | Evidence Folder & Documentation |
+| :--- | :--- | :---: | :--- |
+| **Export to ONNX** | Run the ONNX export script and show git commit | **3** | [`evidence/m2_export_to_onnx/`](evidence/m2_export_to_onnx/) &rarr; [`onnx_export_report.md`](evidence/m2_export_to_onnx/onnx_export_report.md) |
+| **Convert and run live** | Convert to INT8 and run live on device (2.72 MB, -71% size) | **4** | [`evidence/m2_convert_and_run_live/`](evidence/m2_convert_and_run_live/) &rarr; [`quantization_and_live_report.md`](evidence/m2_convert_and_run_live/quantization_and_live_report.md) |
+| **Accuracy check** | Show mAP before vs after on the exact same test set | **4** | [`evidence/m2_accuracy_check/`](evidence/m2_accuracy_check/) &rarr; [`mAP_before_vs_after_report.md`](evidence/m2_accuracy_check/mAP_before_vs_after_report.md) |
+| **Fair benchmark** | 20 warm-up & 100+ timed runs (batch 1): median & p95 latency, FPS, model size | **4** | [`evidence/m2_fair_benchmark/`](evidence/m2_fair_benchmark/) &rarr; [`fair_benchmark_report.md`](evidence/m2_fair_benchmark/fair_benchmark_report.md) |
+| **CPU vs accelerator + stack**| Show CPU vs accelerator comparison table and draw software stack | **2** | [`evidence/m2_cpu_vs_accelerator/`](evidence/m2_cpu_vs_accelerator/) &rarr; [`cpu_vs_accelerator_analysis.md`](evidence/m2_cpu_vs_accelerator/cpu_vs_accelerator_analysis.md) |
+| **Own target and trade-off** | Show pre-training accuracy & speed target, result, explain trade-offs | **3** | [`evidence/m2_target_and_tradeoff/`](evidence/m2_target_and_tradeoff/) &rarr; [`target_and_tradeoff_analysis.md`](evidence/m2_target_and_tradeoff/target_and_tradeoff_analysis.md) |
+
+---
+
+## 6. Raspberry Pi 5 Hardware & Measured Benchmark Summary
+
+- **Device:** Raspberry Pi 5 Model B Rev 1.1 (4GB LPDDR4X RAM, Quad-core ARM Cortex-A76 @ 2.4 GHz)
+- **Camera:** Logitech C270 HD USB Webcam (`/dev/video0`, native 640x480 @ 30 FPS)
+- **OS:** Debian GNU/Linux 13 (Trixie) / Raspberry Pi OS 13.7 (Kernel 6.18.50 aarch64)
+
+### Actual Physical Measured Performance
+
+| Runtime Format | Model Size | Median Latency | P95 Latency | FPS | mAP @ 0.50 | Accuracy Status |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **PyTorch FP32 Baseline** | 5.16 MB | 468.2 ms | 695.2 ms | 2.14 FPS | **100.0%** | Full Precision Baseline |
+| **ONNX FP32 (Opset 17)** | 9.34 MB | 256.8 ms | 393.4 ms | **3.89 FPS** | **100.0%** | $1.82\times$ CPU Speedup |
+| **Quantized INT8 ONNX** | **2.72 MB** (-71%) | 274.6 ms | 445.8 ms | **3.64 FPS** | **100.0%** | Near-Zero Accuracy Drop |
+
+---
+
+## 7. Quick Launch Instructions
+
+### Run Live Webcam Object Detection:
 ```bash
 ./run_detection.sh
 ```
-*To exit live detection, press the **`q`** key in the OpenCV video window.*
+*Press **`q`** in the video window to quit, **`s`** to save a snapshot.*
 
-To run in headless or benchmark mode:
+### Run Fair Benchmark (20 Warm-up + 100 Timed Runs):
 ```bash
-./venv/bin/python src/inference.py --model models/best.pt --source 0 --max-frames 50
+./venv/bin/python evidence/m2_fair_benchmark/run_fair_benchmark.py
 ```
 
----
-
-### Known Limitations & Future Optimizations
-1. **CPU Execution:** Inference currently executes on the ARM Cortex-A76 CPU. Latency is ~280ms (3.5 FPS).
-2. **Future Acceleration (M2 / M3):** Throughput can be accelerated further using ONNX Runtime with INT8 quantization, OpenVINO, or NPU acceleration if a Hailo-8L Raspberry Pi AI HAT is attached.
+### Run Accuracy Comparison on Test Split:
+```bash
+./venv/bin/python evidence/m2_accuracy_check/accuracy_evaluation.py
+```
 
 ---
 
